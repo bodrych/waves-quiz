@@ -1,0 +1,33 @@
+let payoutFee = 500000
+
+let me = tx.sender
+let adminPublicKey = base58'7fT6vCaX5fAkqTzHGBTHyGGsfrFFSm8kUosN71qztfdY'
+
+let answer = extract(getBinary(me, "answer"))
+let ticketId = fromBase58String(extract(getString(me, "ticket")))
+let gamePrice = extract(getInteger(me, "price"))
+#let startHeight = extract(getInteger(me, "height"))
+
+match tx {
+    case tuning:DataTransaction =>
+        if (sigVerify(tuning.bodyBytes, tuning.proofs[0], adminPublicKey)) then true else throw("You aren't quiz admin")
+    case payout:TransferTransaction =>
+        let ticketBalance = assetBalance(payout.recipient, ticketId)
+        let paid = ticketBalance >= gamePrice
+        #let started = height >= startHeight
+        let correct = sha256(payout.attachment) == answer
+        if (!paid) then{
+            throw("You must have " + toString(gamePrice) + " tickets")
+        } else {
+            #if (!started) then {
+            #    throw("The game has not started yet")
+            #} else {
+                if (!correct) then {
+                    throw("The answer is not correct")
+                } else {
+                    payout.fee == payoutFee && !isDefined(payout.feeAssetId)
+                }
+            #}
+        }
+    case _ => false
+}
