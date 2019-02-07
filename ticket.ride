@@ -1,4 +1,4 @@
-let adminPublicKey = base58'3bBumwZNWnpwe76xAmfQXajtZZkhat6aDt8jx75daZq6'
+let adminPublicKey = base58'7fT6vCaX5fAkqTzHGBTHyGGsfrFFSm8kUosN71qztfdY'
 match tx {
   case e:ExchangeTransaction =>
     let sell = sigVerify(e.sellOrder.bodyBytes, e.sellOrder.proofs[0], e.sellOrder.senderPublicKey)

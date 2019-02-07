@@ -16,7 +16,7 @@ match tx {
         let paid = ticketBalance >= gamePrice
         #let started = height >= startHeight
         let correct = sha256(payout.attachment) == answer
-        if (!paid) then{
+        if (!paid) then {
             throw("You must have " + toString(gamePrice) + " tickets")
         } else {
             #if (!started) then {

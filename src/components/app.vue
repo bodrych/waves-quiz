@@ -26,7 +26,7 @@
 					</div>
 				</v-tooltip>
 				<v-spacer></v-spacer>
-				<v-tooltip bottom>
+<!-- 				<v-tooltip bottom>
 					<v-btn
 						slot="activator"
 						color=""
@@ -40,7 +40,7 @@
 						Start height: {{ startHeight }}<br/>
 						Current height: {{ height }}
 					</div>
-				</v-tooltip>
+				</v-tooltip> -->
 				<v-btn flat :href="'https://wavesexplorer.com/address/' + quiz">{{ prize / 100000000.0 }} WAVES</v-btn>
 			</v-toolbar>
 
@@ -121,18 +121,29 @@ export default {
   name: 'Normal',
 	data: () => {
 		return {
-			quiz: "3P4mJL1QW74QBeBo2QQqqqqqopCCe8vcYzu",
+			quiz: "3P2WGnT6N4n4GkoJDYTz2yvVwEMQQQqqqqt",
 	  	node: "https://nodes.wavesplatform.com",
-			quizPK: '7jFGtoNRBzxYkHo4Kqega8R3TsE7N9Lps14G2BFnuGj6',
-			status: false,
+			quizPK: '8bE6aeC4zAQCgqRzjekWAiBZHxLgPRap4oXLnM1HKML1',
+			// status: false,
 			prize: 0,
-			questions: [],
+			questions: [
+				'Data transaction type number + set asset script transaction type number =',
+				'What is the sigVerify id (after compilation)?',
+				'The address corresponding to SEED phrase «produce pole person acid conduct embody develop spatial approve maze void venture achieve sample vintage»',
+				'Maximum number of entries in data transaction',
+				'Enter the generetion signature of the first Waves Platform blockchain block',
+				'Smart asset is "match tx {case t: ExchangeTransaction => t.sellOrder.sender == t.buyOrder.sender case _ => false}". True or false for ExchangeTransaction?',
+				'Decompile account script base64:AQMDBAAAAAckbWF0Y2gwBQAAAAJ0eAYGCQAB9AAAAAMIBQAAAAJ0eAAAAAlib2R5Qnl0ZXMJAAGRAAAAAggFAAAAAnR4AAAABnByb29mcwAAAAAAAAAAAAEAAAACCtEGB5MmlV0=',
+				'Waves node application initial commit id',
+				'How waves-wall.now.sh works without Waves Keeper? (enter the API name)',
+				'Enter the hash of the previous 9 answers to the questions using the method of this site'
+			],
 			answers: [],
 			publicState: {},
 			price: 1,
 			fee: 500000,
-			height: 0,
-			startHeight: 0,
+			// height: 0,
+			// startHeight: 0,
 			dialog: {
 				status: false,
 				text: ''
@@ -148,9 +159,9 @@ export default {
 		update: async function() {
 			let balance = await api.getBalance(this.node, this.quiz)
 			this.prize = balance
-			this.height = await api.getHeight(this.node)
-			this.startHeight = await api.getStartHeight(this.node, this.quiz)
-			this.status = (this.height >= this.startHeight) ? true : false
+			// this.height = await api.getHeight(this.node)
+			// this.startHeight = await api.getStartHeight(this.node, this.quiz)
+			// this.status = (this.height >= this.startHeight) ? true : false
 		},
 		getPrice: async function() {
 			let result = await api.getPrice(this.node, this.quiz)
@@ -194,7 +205,7 @@ export default {
 					senderPublicKey: this.quizPK
 				}
 			}
-			console.log(params)
+			console.log(hash.hex())
 			try {
 				let res = await Waves.signAndPublishTransaction(params)
 			} catch (err) {
